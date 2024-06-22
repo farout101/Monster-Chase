@@ -17,7 +17,7 @@ public class Player : MonoBehaviour
     private Animator anim;
     private SpriteRenderer sr;
 
-    private String WALK_ANIMATION = "walk";
+    private readonly string WALK_ANIMATION = "walk";
     // Start is called before the first frame update
 
     private void Awake()
@@ -36,14 +36,36 @@ public class Player : MonoBehaviour
     void Update()
     {
         playerMoveKeyboard();
+
+        AnimatePlayer();
     }
 
     void playerMoveKeyboard()
     {
         movementX = Input.GetAxisRaw("Horizontal"); // GetAxis can give the float values!
 
-        transform.position += new Vector3(movementX, 0, 0) * Time.deltaTime * moveForce;
+        transform.position += moveForce * Time.deltaTime * new Vector3(movementX, 0, 0);
 
-        Debug.Log("Movement value : " + transform.position);
+        // Debug.Log("Movement value : " + transform.position);
+    }
+
+    void AnimatePlayer()
+    {
+        // going right
+        if (movementX > 0)
+        {
+            sr.flipX = false;
+            anim.SetBool(WALK_ANIMATION, true);
+        }
+        // goiding left
+        else if (movementX < 0)
+        {
+            sr.flipX = true;
+            anim.SetBool(WALK_ANIMATION, true);
+        }
+        else
+        {
+            anim.SetBool(WALK_ANIMATION, false);
+        }
     }
 }
