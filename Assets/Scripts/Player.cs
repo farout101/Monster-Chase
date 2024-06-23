@@ -32,18 +32,26 @@ public class Player : MonoBehaviour
 
     void Start()
     {
-
+        // Initialization code if needed
     }
 
     void Update()
     {
+        // Handle input detection
         playerMoveKeyboard();
         AnimatePlayer();
         CheckJump();  // Check for jump input
     }
 
-    private void FixedUpdate() {
-        if (isJumping) {
+    private void FixedUpdate()
+    {
+        // Handle physics-based movement and jumping
+        if (movementX != 0) {
+            MovePlayer();
+        }
+        
+        if (isJumping)
+        {
             PlayerJump();
             isJumping = false;  // Reset jump flag
         }
@@ -51,13 +59,19 @@ public class Player : MonoBehaviour
 
     void playerMoveKeyboard()
     {
+        // Detect horizontal movement input
         movementX = Input.GetAxisRaw("Horizontal"); // GetAxis can give the float values!
+    }
 
+    void MovePlayer()
+    {
+        // Apply movement force
         transform.position += moveForce * Time.deltaTime * new Vector3(movementX, 0, 0);
     }
 
     void AnimatePlayer()
     {
+        // Handle sprite animation based on movement direction
         if (movementX > 0)
         {
             sr.flipX = false;
@@ -74,19 +88,27 @@ public class Player : MonoBehaviour
         }
     }
 
-    void CheckJump() {
-        if (Input.GetButtonDown("Jump") && isGrounded) {
-            isGrounded = false ;  // Set flag to indicate player is no longer grounded
+    void CheckJump()
+    {
+        // Check if the jump button is pressed and the player is grounded
+        if (Input.GetButtonDown("Jump") && isGrounded)
+        {
+            isGrounded = false;  // Set flag to indicate player is no longer grounded
             isJumping = true;  // Set jump flag when button is pressed
         }
     }
-  
-    void PlayerJump() {
+
+    void PlayerJump()
+    {
+        // Apply jump force
         myBody.AddForce(new Vector2(0f, jumpForce), ForceMode2D.Impulse);
     }
 
-    private void OnCollisionEnter2D(Collision2D collision){
-        if (collision.gameObject.CompareTag(GROUND_TAG)) {
+    private void OnCollisionEnter2D(Collision2D collision)
+    { 
+        // Check if the player collides with ground
+        if (collision.gameObject.CompareTag(GROUND_TAG))
+        {
             isGrounded = true;
         }
     }
