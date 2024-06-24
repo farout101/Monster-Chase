@@ -46,10 +46,8 @@ public class Player : MonoBehaviour
     private void FixedUpdate()
     {
         // Handle physics-based movement and jumping
-        if (movementX != 0) {
-            MovePlayer();
-        }
-        
+        MovePlayer();
+
         if (isJumping)
         {
             PlayerJump();
@@ -60,13 +58,16 @@ public class Player : MonoBehaviour
     void playerMoveKeyboard()
     {
         // Detect horizontal movement input
-        movementX = Input.GetAxisRaw("Horizontal"); // GetAxis can give the float values!
+        movementX = Input.GetAxisRaw("Horizontal"); // GetAxisRaw for immediate input
+        Debug.Log("MovementX: " + movementX); // Debug movement input
     }
 
     void MovePlayer()
     {
         // Apply movement force
-        transform.position += moveForce * Time.deltaTime * new Vector3(movementX, 0, 0);
+        Vector3 movement = new Vector3(movementX, 0, 0);
+        transform.position += moveForce * Time.deltaTime * movement;
+        Debug.Log("New Position: " + transform.position); // Debug new position
     }
 
     void AnimatePlayer()
@@ -110,6 +111,7 @@ public class Player : MonoBehaviour
         if (collision.gameObject.CompareTag(GROUND_TAG))
         {
             isGrounded = true;
+            Debug.Log("Landed on Ground"); // Debug ground landing
         }
     }
 }
